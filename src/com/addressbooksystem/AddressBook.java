@@ -185,10 +185,34 @@ public class AddressBook {
 		}
 	}
 	
+	//method to delete contact
+	public static void deletecontact() {
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter number of record to be deleted:" );
+		int delrecord = sc.nextInt();
+		while( delrecord > 0 ) {
+			
+			System.out.println("Enter record name ");
+			String name = sc.nextLine();
+			name = name.replaceAll("\\s", "");
+			
+			for(int i = 0; i < arr.size() ; i++ ) {
+				if (arr.get(i).firstname.equals(name)) {
+					arr.remove(i);
+					break;
+				}
+			}
+			delrecord--;
+		}
+	}
+	
 	//main method
 	public static void main(String[] args) {
 		
 		addcontact();
 		editcontact();
+		deletecontact();
+		
 	}
 }
