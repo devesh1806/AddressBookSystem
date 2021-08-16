@@ -1,5 +1,4 @@
 package com.addressbooksystem;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 //created contactBook for adding contacts
@@ -32,11 +31,16 @@ class ContactBook{
 
 
 public class AddressBook {
+<<<<<<< HEAD
 	
 	public static ArrayList<ContactBook> arr= new ArrayList();
 	
 	//method for adding contact
 	public static void addcontact() {
+=======
+	public static void main(String[] args) {
+		
+>>>>>>> UC2
 		
 		//taking input
 		Scanner sc = new Scanner(System.in);
@@ -44,6 +48,8 @@ public class AddressBook {
 		//Adding records.
 		System.out.println("Enter number of record:");
 		int record = sc.nextInt();
+		ContactBook[] arr= new ContactBook[record];
+		int j = record;
 		while ( record!=0 ) {
 			
 			String firstname= sc.nextLine();
@@ -62,14 +68,19 @@ public class AddressBook {
 			
 			String phonenumber=sc.nextLine(); 
 			
+<<<<<<< HEAD
 			//Below substring done due to ide memory buffer error
 			firstname = firstname.replaceAll("\\s", "");
 			phonenumber = phonenumber.replaceAll("\\s", "");
 			
 			
+=======
+			firstname = firstname.replace("\\s", "");
+			phonenumber = phonenumber.replace("\\s", "");
+>>>>>>> UC2
 			//creation of object or address book creation
 			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
-			arr.add(cb);
+			arr[(j-record)]=cb;
 			record--;
 		}
 	}
