@@ -32,7 +32,10 @@ class ContactBook{
 
 public class AddressBook {
 
-	public static void addcontact() {
+	public static ContactBook[] arr;
+	
+	//method for adding contact
+	public static int addcontact() {
 
 		
 		//taking input
@@ -41,8 +44,8 @@ public class AddressBook {
 		//Adding records.
 		System.out.println("Enter number of record:");
 		int record = sc.nextInt();
-		ContactBook[] arr= new ContactBook[record];
 		int j = record;
+		arr = new ContactBook[record];
 		while ( record!=0 ) {
 			
 			String firstname= sc.nextLine();
@@ -69,13 +72,145 @@ public class AddressBook {
 			arr[(j-record)]=cb;
 			record--;
 		}
+		return j;
 	}
 	
+
+	//method for editing contact
+	public static void editcontact(int total) {
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter records to be edited: ");
+		int editrecord = sc.nextInt();
+		
+		while ( editrecord!= 0 ) {
+			System.out.println("Enter firstname lastname address state city emailid zipc phonenumber");
+			String input1 = sc.nextLine();
+			input1 = input1.replaceAll("\\s", "");
+			if ( input1.equals("firstname") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].firstname.equals(name) ) {
+						arr[i].firstname=updatename;
+						break;
+					}
+				}
+			}
+			
+			else if ( input1.equals("lastname") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].lastname.equals(name) ) {
+						arr[i].lastname=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("address") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].address.equals(name) ) {
+						arr[i].address=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("state") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].state.equals(name) ) {
+						arr[i].state=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("city") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].city.equals(name) ) {
+						arr[i].city=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("emailid") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].emailid.equals(name) ) {
+						arr[i].emailid=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("zipc") ) {
+				int name = sc.nextInt();
+				int updatename = sc.nextInt();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].zipc == name ) {
+						arr[i].zipc=updatename;
+						break;
+					}
+				}
+			}
+			else if ( input1.equals("phonenumber") ) {
+				String name = sc.nextLine();
+				String updatename = sc.nextLine();
+				
+				int i;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].phonenumber.equals(name) ) {
+						arr[i].phonenumber=updatename;
+						break;
+					}
+				}
+			}
+			editrecord--;
+		}
+	}
+
 	
 	//main method
 	public static void main(String[] args) {
-		
-		addcontact();
-		
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("How many operation:");
+		int operation = sc.nextInt();
+		int total=0;
+		while(operation>0) {
+			System.out.println("Enter 1.Add 2.Edit");
+			int option = sc.nextInt();
+			switch (option){
+				case 1:
+					total = addcontact();
+					break;
+				case 2:
+					editcontact(total);
+					break;
+				default:
+					System.out.println("Enter valid option");
+					break;
+			}
+			operation--;
+		}
 	}
 }
