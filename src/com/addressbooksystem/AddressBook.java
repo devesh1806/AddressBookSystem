@@ -33,10 +33,10 @@ class ContactBook{
 
 public class AddressBook {
 	
-	public static ArrayList<ContactBook> arr= new ArrayList();
+	public static ContactBook[] arr;
 	
 	//method for adding contact
-	public static void addcontact() {
+	public static int addcontact() {
 		
 		//taking input
 		Scanner sc = new Scanner(System.in);
@@ -44,6 +44,8 @@ public class AddressBook {
 		//Adding records.
 		System.out.println("Enter number of record:");
 		int record = sc.nextInt();
+		int j = record;
+		arr = new ContactBook[record];
 		while ( record!=0 ) {
 			
 			String firstname= sc.nextLine();
@@ -69,13 +71,14 @@ public class AddressBook {
 			
 			//creation of object or address book creation
 			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
-			arr.add(cb);
+			arr[(j-record)]=cb;
 			record--;
 		}
+		return j;
 	}
 	
 	//method for editing contact
-	public static void editcontact() {
+	public static void editcontact(int total) {
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter records to be edited: ");
@@ -90,21 +93,22 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).firstname.equals(name) ) {
-						arr.get(i).firstname=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].firstname.equals(name) ) {
+						arr[i].firstname=updatename;
 						break;
 					}
 				}
 			}
+			
 			else if ( input1.equals("lastname") ) {
 				String name = sc.nextLine();
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).lastname.equals(name) ) {
-						arr.get(i).lastname=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].lastname.equals(name) ) {
+						arr[i].lastname=updatename;
 						break;
 					}
 				}
@@ -114,9 +118,9 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).address.equals(name) ) {
-						arr.get(i).address=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].address.equals(name) ) {
+						arr[i].address=updatename;
 						break;
 					}
 				}
@@ -126,9 +130,9 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).state.equals(name) ) {
-						arr.get(i).state=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].state.equals(name) ) {
+						arr[i].state=updatename;
 						break;
 					}
 				}
@@ -138,9 +142,9 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).city.equals(name) ) {
-						arr.get(i).city=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].city.equals(name) ) {
+						arr[i].city=updatename;
 						break;
 					}
 				}
@@ -150,9 +154,9 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).emailid.equals(name) ) {
-						arr.get(i).emailid=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].emailid.equals(name) ) {
+						arr[i].emailid=updatename;
 						break;
 					}
 				}
@@ -162,9 +166,9 @@ public class AddressBook {
 				int updatename = sc.nextInt();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).zipc == name ) {
-						arr.get(i).zipc=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].zipc == name ) {
+						arr[i].zipc=updatename;
 						break;
 					}
 				}
@@ -174,9 +178,9 @@ public class AddressBook {
 				String updatename = sc.nextLine();
 				
 				int i;
-				for(i = 0 ; i < arr.size(); i++) {
-					if (arr.get(i).phonenumber.equals(name) ) {
-						arr.get(i).phonenumber=updatename;
+				for(i = 0 ; i < total; i++) {
+					if (arr[i].phonenumber.equals(name) ) {
+						arr[i].phonenumber=updatename;
 						break;
 					}
 				}
@@ -188,7 +192,25 @@ public class AddressBook {
 	//main method
 	public static void main(String[] args) {
 		
-		addcontact();
-		editcontact();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("How many operation:");
+		int operation = sc.nextInt();
+		int total=0;
+		while(operation>0) {
+			System.out.println("Enter 1.Add 2.Edit");
+			int option = sc.nextInt();
+			switch (option){
+				case 1:
+					total = addcontact();
+					break;
+				case 2:
+					editcontact(total);
+					break;
+				default:
+					System.out.println("Enter valid option");
+					break;
+			}
+			operation--;
+		}
 	}
 }
