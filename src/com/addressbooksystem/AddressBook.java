@@ -1,5 +1,4 @@
 package com.addressbooksystem;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 //created contactBook for adding contacts
@@ -32,13 +31,11 @@ class ContactBook{
 
 
 public class AddressBook {
-	
+
 	public static ContactBook[] arr;
 	
 	//method for adding contact
 	public static int addcontact() {
-		
-		//taking input
 		Scanner sc = new Scanner(System.in);
 		
 		//Adding records.
@@ -67,8 +64,6 @@ public class AddressBook {
 			//Below substring done due to ide memory buffer error
 			firstname = firstname.replaceAll("\\s", "");
 			phonenumber = phonenumber.replaceAll("\\s", "");
-			
-			
 			//creation of object or address book creation
 			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
 			arr[(j-record)]=cb;
@@ -77,6 +72,7 @@ public class AddressBook {
 		return j;
 	}
 	
+
 	//method for editing contact
 	public static void editcontact(int total) {
 		
@@ -188,8 +184,9 @@ public class AddressBook {
 			editrecord--;
 		}
 	}
-	
-	//method to delete record
+
+
+
 	public static void deletecontact() {
 		
 		Scanner sc = new Scanner(System.in);
@@ -204,6 +201,7 @@ public class AddressBook {
 			for(int i = 0; i < arr.length ; i++ ) {
 				if (arr[i].firstname.equals(name)) {
 					arr[i]=null;
+
 					break;
 				}
 			}
@@ -211,16 +209,32 @@ public class AddressBook {
 		}
 	}
 	
+	//method to display contact
+	public static void displaycontact() {
+		for( int i = 0 ; i < arr.length ; i++ ) {
+			if ( arr[i] != null ) {
+				System.out.println();
+				System.out.println("Firstname: " + arr[i].firstname);
+				System.out.println("Lastname: " + arr[i].lastname);
+				System.out.println("Address: " + arr[i].address);
+				System.out.println("State: " + arr[i].state);
+				System.out.println("City: " + arr[i].city);
+				System.out.println("Emailid: " + arr[i].emailid);
+				System.out.println("Zipcode: " + arr[i].zipc);
+				System.out.println("Phone number: " + arr[i].phonenumber);
+			}
+		}
+	}
+	
+
 	//main method
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.println("How many operation:");
-		int operation = sc.nextInt();
 		int total=0;
 		int flag = 0;
-		while(operation>0) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.exit");
+		while(true) {
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -233,14 +247,16 @@ public class AddressBook {
 					deletecontact();
 					break;
 				case 4:
-					flag = 1;
+					displaycontact();
+					break;
+				case 5:
+					flag=1;
 					break;
 				default:
 					System.out.println("Enter valid option");
 					break;
 			}
 			if (flag == 1) break;
-			operation--;
 		}
 	}
 }
