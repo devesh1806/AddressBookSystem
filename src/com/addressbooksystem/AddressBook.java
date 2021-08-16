@@ -36,9 +36,6 @@ public class AddressBook {
 	
 	//method for adding contact
 	public static int addcontact() {
-
-		
-		//taking input
 		Scanner sc = new Scanner(System.in);
 		
 		//Adding records.
@@ -188,16 +185,40 @@ public class AddressBook {
 		}
 	}
 
-	
+
+
+	public static void deletecontact() {
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter number of record to be deleted:" );
+		int delrecord = sc.nextInt();
+		while( delrecord > 0 ) {
+			
+			System.out.println("Enter record name ");
+			String name = sc.nextLine();
+			name = name.replaceAll("\\s", "");
+			
+			for(int i = 0; i < arr.length ; i++ ) {
+				if (arr[i].firstname.equals(name)) {
+					arr[i]=null;
+
+					break;
+				}
+			}
+			delrecord--;
+		}
+	}
+
 	//main method
 	public static void main(String[] args) {
-
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("How many operation:");
 		int operation = sc.nextInt();
 		int total=0;
+		int flag = 0;
 		while(operation>0) {
-			System.out.println("Enter 1.Add 2.Edit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -206,11 +227,19 @@ public class AddressBook {
 				case 2:
 					editcontact(total);
 					break;
+				case 3:
+					deletecontact();
+					break;
+				case 4:
+					flag = 1;
+					break;
 				default:
 					System.out.println("Enter valid option");
 					break;
 			}
+			if (flag == 1) break;
 			operation--;
 		}
 	}
 }
+
