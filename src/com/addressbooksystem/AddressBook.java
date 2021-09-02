@@ -1,19 +1,28 @@
 package com.addressbooksystem;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AddressBook {
 	
+	public static HashMap<Integer, String> addressBookName = new HashMap<Integer,String>();
 	public static ArrayList<ArrayList<ContactBook>> mainArr= new ArrayList<ArrayList<ContactBook>>();
 	
+	private static boolean duplicateCheck(ArrayList<ContactBook> arr1,String fName,String lName) {
+		for(int i=0;i<arr1.size();i++) {
+			if (arr1.get(i).firstname.equals(fName) && arr1.get(i).lastname.equals(lName)) return true;
+		}
+		return false;
+	}
+	
+	
 	//method for adding contact
-	public static void addContact(int input) {
+	public static void addContact(final int input) {
 		Scanner sc = new Scanner(System.in);
 		
 		//Adding records.
 		System.out.println("Enter number of record:");
 		int record = sc.nextInt();
-		
 		
 		ArrayList<ContactBook> arr = new ArrayList<>();
 		
@@ -38,11 +47,19 @@ public class AddressBook {
 			//Below substring done due to ide memory buffer error
 			firstname = firstname.replaceAll("\\s", "");
 			phonenumber = phonenumber.replaceAll("\\s", "");
+			
 			//creation of object or address book creation
 			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
-			if ((input-1)>=0) mainArr.get(input-1).add(cb);
+			if ((input-1)>=0) {
+				if (duplicateCheck(mainArr.get(input-1),firstname,lastname)) {
+					System.out.println("Entry already in Address Book");
+				}
+				else {
+					mainArr.get(input-1).add(cb);
+				}
+				
+			}
 			else arr.add(cb);
-			displayContact();
 			record--;
 		}
 		if ((input-1)<0) mainArr.add(arr);
@@ -178,13 +195,13 @@ public class AddressBook {
 		int delrecord = sc.nextInt();
 		while( delrecord > 0 ) {
 			
-			System.out.println("Enter record name ");
+			System.out.println("Enter record Firstname and Lastname:");
 			String name = sc.nextLine();
 			name = name.replaceAll("\\s", "");
-			
+			String lName = sc.nextLine();
 			for(int j = 0;j<mainArr.size();j++) {
 				for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-					if (mainArr.get(j).get(i).firstname.equals(name)) {
+					if (mainArr.get(j).get(i).firstname.equals(name) && mainArr.get(j).get(i).lastname.equals(lName)) {
 						mainArr.get(j).remove(i);
 						break;
 					}
@@ -198,8 +215,9 @@ public class AddressBook {
 	public static void displayContact() {
 		
 		for(int j = 0;j<mainArr.size();j++) {
+			System.out.println();
+			System.out.println(addressBookName.get(j));
 			for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-				System.out.println();
 				System.out.println("Firstname: " + mainArr.get(j).get(i).firstname);
 				System.out.println("Lastname: " + mainArr.get(j).get(i).lastname);
 				System.out.println("Address: " + mainArr.get(j).get(i).address);
@@ -208,6 +226,7 @@ public class AddressBook {
 				System.out.println("Emailid: " + mainArr.get(j).get(i).emailid);
 				System.out.println("Zipcode: " + mainArr.get(j).get(i).zipc);
 				System.out.println("Phone number: " + mainArr.get(j).get(i).phonenumber);
+				System.out.println();
 			}
 		}
 	}
@@ -218,9 +237,22 @@ public class AddressBook {
 		if (mainArr.size()>0) {
 			System.out.println("Enter position: 1-" + mainArr.size());
 			int input = sc.nextInt();
-			addContact(input);
+			if (input > mainArr.size()) {
+				System.out.println("Enter Address Book name");
+				String dummy = sc.nextLine();
+				String adName = sc.nextLine();
+				addressBookName.put(input, adName);
+				addContact(0);
+			}
+			else {
+				addContact(input);
+			}
+			
 		}
 		else {
+			System.out.println("Enter Address Book name");
+			String adName = sc.nextLine();
+			addressBookName.put(0, adName);
 			addContact(0);
 		}
 	}
