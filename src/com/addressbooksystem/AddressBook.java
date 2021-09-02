@@ -1,6 +1,9 @@
 package com.addressbooksystem;
 import java.util.Scanner;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class AddressBook {
@@ -250,6 +253,30 @@ public class AddressBook {
 			}
 		}
 	}
+	
+	private static void countPersonsCityState() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to view persons of 1.City 2.State");
+		int input = sc.nextInt();
+		ArrayList<String> check = new ArrayList<String>();
+		if (input==1) {
+			for(String i:addressBookCity.values()) {
+				if (!check.contains(i)) {
+					check.add(i);
+					System.out.println("Count of "+ i + " is " +Collections.frequency(addressBookCity.values(), i));
+				}
+				
+			}
+		}
+		else {
+			for(String i:addressBookState.values()) {
+				if (!check.contains(i)) {
+					check.add(i);
+					System.out.println("Count of "+i+ " is " +Collections.frequency(addressBookState.values(), i));
+				}
+			}
+		}
+	}
 
 	//main method
 	public static void main(String[] args) {
@@ -258,7 +285,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count 8.Exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -280,6 +307,9 @@ public class AddressBook {
 					viewPersonsCityState();
 					break;
 				case 7:
+					countPersonsCityState();
+					break;
+				case 8:
 					flag=1;
 					break;
 				default:
