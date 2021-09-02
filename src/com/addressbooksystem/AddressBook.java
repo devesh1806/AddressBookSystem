@@ -241,7 +241,7 @@ public class AddressBook {
 				System.out.println("Enter Address Book name");
 				String dummy = sc.nextLine();
 				String adName = sc.nextLine();
-				addressBookName.put(input, adName);
+				addressBookName.put(input-1, adName);
 				addContact(0);
 			}
 			else {
@@ -257,6 +257,26 @@ public class AddressBook {
 		}
 	}
 	
+	//Search All related results
+	private static void searchAllRelated() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to Search According to 1.City 2.State");
+		int input = sc.nextInt();
+		String adName = sc.nextLine();
+		adName = adName.replaceAll("\\s", "");
+		System.out.println();
+		for(int j = 0;j<mainArr.size();j++) {
+			for(int i = 0 ; i < mainArr.get(j).size(); i++) {
+				if (input==1 && mainArr.get(j).get(i).city.equals(adName)) {
+					System.out.println(mainArr.get(j).get(i).firstname + " " + mainArr.get(j).get(i).lastname);
+				}
+				else {
+					System.out.println(mainArr.get(j).get(i).firstname + " " + mainArr.get(j).get(i).lastname);
+				}
+			}
+		}
+	}
+	
 
 	//main method
 	public static void main(String[] args) {
@@ -265,7 +285,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -281,6 +301,9 @@ public class AddressBook {
 					displayContact();
 					break;
 				case 5:
+					searchAllRelated();
+					break;
+				case 6:
 					flag=1;
 					break;
 				default:
