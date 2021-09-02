@@ -2,26 +2,26 @@ package com.addressbooksystem;
 
 public class ContactBook {
 	
-	String firstname; 
-	String lastname; 
+	String firstName; 
+	String lastName; 
 	String address; 
 	String state; 
 	String city; 
-	String emailid;
-	int zipc; 
-	String phonenumber; 
+	String emailId;
+	int zip; 
+	String phoneNumber; 
 	
 	
 	//constructor of class
-	public ContactBook( String firstname, String lastname, String address, String state, String city, String emailid, int zipc, String phonenumber){
-		this.firstname = firstname; 
-		this.lastname=lastname; 
+	public ContactBook( String firstName, String lastName, String address, String state, String city, String emailId, int zip, String phoneNumber){
+		this.firstName = firstName; 
+		this.lastName=lastName; 
 		this.address=address; 
 		this.state=state; 
 		this.city=city;
-		this.emailid= emailid ;
-		this.zipc=zipc; 
-		this.phonenumber=phonenumber;
+		this.emailId= emailId ;
+		this.zip=zip; 
+		this.phoneNumber=phoneNumber;
 		
 	}
 }
