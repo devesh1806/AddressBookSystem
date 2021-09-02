@@ -7,10 +7,13 @@ public class AddressBook {
 	
 	public static HashMap<Integer, String> addressBookName = new HashMap<Integer,String>();
 	public static ArrayList<ArrayList<ContactBook>> mainArr= new ArrayList<ArrayList<ContactBook>>();
+	public static HashMap<String, String> addressBookCity = new HashMap<String,String>();
+	public static HashMap<String, String> addressBookState = new HashMap<String,String>();
+	public static ArrayList<String> persons ;
 	
 	private static boolean duplicateCheck(ArrayList<ContactBook> arr1,String fName,String lName) {
 		for(int i=0;i<arr1.size();i++) {
-			if (arr1.get(i).firstname.equals(fName) && arr1.get(i).lastname.equals(lName)) return true;
+			if (arr1.get(i).firstName.equals(fName) && arr1.get(i).lastName.equals(lName)) return true;
 		}
 		return false;
 	}
@@ -28,9 +31,9 @@ public class AddressBook {
 		
 		while ( record!=0 ) {
 			
-			String firstname= sc.nextLine();
+			String firstName= sc.nextLine();
 			
-			String lastname= sc.nextLine();
+			String lastName= sc.nextLine();
 			
 			String address= sc.nextLine();
 			
@@ -38,28 +41,36 @@ public class AddressBook {
 			
 			String city= sc.nextLine();
 			
-			String emailid= sc.nextLine();
+			String emailId= sc.nextLine();
 			
-			int zipc=sc.nextInt(); 
+			int zip=sc.nextInt(); 
 			
-			String phonenumber=sc.nextLine(); 
+			String phoneNumber=sc.nextLine(); 
 			
 			//Below substring done due to ide memory buffer error
-			firstname = firstname.replaceAll("\\s", "");
-			phonenumber = phonenumber.replaceAll("\\s", "");
+			firstName = firstName.replaceAll("\\s", "");
+			phoneNumber = phoneNumber.replaceAll("\\s", "");
 			
 			//creation of object or address book creation
-			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
+			ContactBook cb = new ContactBook(firstName,lastName,address,state,city,emailId,zip,phoneNumber);
 			if ((input-1)>=0) {
-				if (duplicateCheck(mainArr.get(input-1),firstname,lastname)) {
+				if (duplicateCheck(mainArr.get(input-1),firstName,lastName)) {
 					System.out.println("Entry already in Address Book");
 				}
 				else {
 					mainArr.get(input-1).add(cb);
+					String value = firstName+" "+lastName;
+					addressBookCity.put(value,city);
+					addressBookState.put(value,state);
 				}
 				
 			}
-			else arr.add(cb);
+			else {
+				arr.add(cb);
+				String value = firstName+" "+lastName;
+				addressBookCity.put(value,city);
+				addressBookState.put(value,state);
+			}
 			record--;
 		}
 		if ((input-1)<0) mainArr.add(arr);
@@ -73,114 +84,60 @@ public class AddressBook {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter records to be edited: ");
 		int editrecord = sc.nextInt();
-		
 		while ( editrecord!= 0 ) {
-			System.out.println("Enter firstname lastname address state city emailid zipc phonenumber");
+			System.out.println("Enter Firstname and Lastname :");
 			String input1 = sc.nextLine();
 			input1 = input1.replaceAll("\\s", "");
-			if ( input1.equals("firstname") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				for(int j =0 ;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).firstname.equals(name) ) {
-							mainArr.get(j).get(i).firstname=updatename;
-							break;
-						}
-					}
-				}
-			}
+			String input2 = sc.nextLine();
 			
-			else if ( input1.equals("lastname") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).lastname.equals(name) ) {
-							mainArr.get(j).get(i).lastname=updatename;
-							break;
+			String firstName= sc.nextLine();
+			
+			String lastName= sc.nextLine();
+			
+			String address= sc.nextLine();
+			
+			String state= sc.nextLine();
+			
+			String city= sc.nextLine();
+			
+			String emailId= sc.nextLine();
+			
+			int zip=sc.nextInt(); 
+			
+			String phoneNumber=sc.nextLine(); 
+			
+			//Below substring done due to ide memory buffer error
+			firstName = firstName.replaceAll("\\s", "");
+			phoneNumber = phoneNumber.replaceAll("\\s", "");
+
+			//creation of object or address book creation
+			ContactBook cb = new ContactBook(firstName,lastName,address,state,city,emailId,zip,phoneNumber);
+			int flag = 0;
+			for(int i=0;i<mainArr.size();i++) {
+				for(int j=0;j<mainArr.get(i).size();j++) {
+					if (mainArr.get(i).get(j).firstName.equals(input1) && mainArr.get(i).get(j).lastName.equals(input2)) {
+						for(String names: addressBookCity.keySet()) {
+							if ((names).equals(input1+" "+input2)) {
+								addressBookCity.remove(names);
+								break;
+							}
 						}
+						for(String namesS: addressBookState.keySet()) {
+							if ((namesS).equals(input1+" "+input2)) {
+								addressBookState.remove(namesS);
+								break;
+							}
+						}
+						mainArr.get(i).remove(j);
+						mainArr.get(i).add(j, cb);
+						addressBookCity.put(firstName+" "+lastName, city);
+						addressBookState.put(firstName+" "+lastName, state);
+						flag = 1;
+						break;
+			
 					}
 				}
-			}
-			else if ( input1.equals("address") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).address.equals(name) ) {
-							mainArr.get(j).get(i).address=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("state") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).state.equals(name) ) {
-							mainArr.get(j).get(i).state=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("city") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).city.equals(name) ) {
-							mainArr.get(j).get(i).city=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("emailid") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).emailid.equals(name) ) {
-							mainArr.get(j).get(i).emailid=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("zipc") ) {
-				int name = sc.nextInt();
-				int updatename = sc.nextInt();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).zipc == name ) {
-							mainArr.get(j).get(i).zipc=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("phonenumber") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).phonenumber.equals(name) ) {
-							mainArr.get(j).get(i).phonenumber=updatename;
-							break;
-						}
-					}
-				}
+				if (flag==1) break;
 			}
 			editrecord--;
 		}
@@ -201,7 +158,7 @@ public class AddressBook {
 			String lName = sc.nextLine();
 			for(int j = 0;j<mainArr.size();j++) {
 				for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-					if (mainArr.get(j).get(i).firstname.equals(name) && mainArr.get(j).get(i).lastname.equals(lName)) {
+					if (mainArr.get(j).get(i).firstName.equals(name) && mainArr.get(j).get(i).lastName.equals(lName)) {
 						mainArr.get(j).remove(i);
 						break;
 					}
@@ -218,14 +175,14 @@ public class AddressBook {
 			System.out.println();
 			System.out.println(addressBookName.get(j));
 			for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-				System.out.println("Firstname: " + mainArr.get(j).get(i).firstname);
-				System.out.println("Lastname: " + mainArr.get(j).get(i).lastname);
+				System.out.println("Firstname: " + mainArr.get(j).get(i).firstName);
+				System.out.println("Lastname: " + mainArr.get(j).get(i).lastName);
 				System.out.println("Address: " + mainArr.get(j).get(i).address);
 				System.out.println("State: " + mainArr.get(j).get(i).state);
 				System.out.println("City: " + mainArr.get(j).get(i).city);
-				System.out.println("Emailid: " + mainArr.get(j).get(i).emailid);
-				System.out.println("Zipcode: " + mainArr.get(j).get(i).zipc);
-				System.out.println("Phone number: " + mainArr.get(j).get(i).phonenumber);
+				System.out.println("Emailid: " + mainArr.get(j).get(i).emailId);
+				System.out.println("Zipcode: " + mainArr.get(j).get(i).zip);
+				System.out.println("Phone number: " + mainArr.get(j).get(i).phoneNumber);
 				System.out.println();
 			}
 		}
@@ -268,15 +225,31 @@ public class AddressBook {
 		for(int j = 0;j<mainArr.size();j++) {
 			for(int i = 0 ; i < mainArr.get(j).size(); i++) {
 				if (input==1 && mainArr.get(j).get(i).city.equals(adName)) {
-					System.out.println(mainArr.get(j).get(i).firstname + " " + mainArr.get(j).get(i).lastname);
+					System.out.println(mainArr.get(j).get(i).firstName + " " + mainArr.get(j).get(i).lastName);
 				}
-				else {
-					System.out.println(mainArr.get(j).get(i).firstname + " " + mainArr.get(j).get(i).lastname);
+				else if (input==2 && mainArr.get(j).get(i).state.equals(adName)){
+					System.out.println(mainArr.get(j).get(i).firstName + " " + mainArr.get(j).get(i).lastName);
 				}
 			}
 		}
 	}
 	
+
+	private static void viewPersonsCityState() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to view persons of 1.City 2.State");
+		int input = sc.nextInt();
+		if (input==1) {
+			for(String i: addressBookCity.keySet()) {
+				System.out.println(i +" lives in city " + addressBookCity.get(i));
+			}
+		}
+		else {
+			for(String i: addressBookState.keySet()) {
+				System.out.println(i +" lives in state " + addressBookState.get(i));
+			}
+		}
+	}
 
 	//main method
 	public static void main(String[] args) {
@@ -285,7 +258,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -304,6 +277,9 @@ public class AddressBook {
 					searchAllRelated();
 					break;
 				case 6:
+					viewPersonsCityState();
+					break;
+				case 7:
 					flag=1;
 					break;
 				default:
@@ -313,6 +289,8 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
+
+
 
 }
 
