@@ -1,9 +1,13 @@
 package com.addressbooksystem;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class AddressBook {
 	
+	public static HashMap<Integer, String> addressBookName = new HashMap<Integer,String>();
 	public static ArrayList<ArrayList<ContactBook>> mainArr= new ArrayList<ArrayList<ContactBook>>();
 	
 	//method for adding contact
@@ -19,9 +23,9 @@ public class AddressBook {
 		
 		while ( record!=0 ) {
 			
-			String firstname= sc.nextLine();
+			String firstName= sc.nextLine();
 			
-			String lastname= sc.nextLine();
+			String lastName= sc.nextLine();
 			
 			String address= sc.nextLine();
 			
@@ -29,141 +33,84 @@ public class AddressBook {
 			
 			String city= sc.nextLine();
 			
-			String emailid= sc.nextLine();
+			String emailId= sc.nextLine();
 			
-			int zipc=sc.nextInt(); 
+			int zip=sc.nextInt(); 
 			
-			String phonenumber=sc.nextLine(); 
+			String phoneNumber=sc.nextLine(); 
 			
 			//Below substring done due to ide memory buffer error
-			firstname = firstname.replaceAll("\\s", "");
-			phonenumber = phonenumber.replaceAll("\\s", "");
+			firstName = firstName.replaceAll("\\s", "");
+			phoneNumber = phoneNumber.replaceAll("\\s", "");
 			//creation of object or address book creation
-			ContactBook cb = new ContactBook(firstname,lastname,address,state,city,emailid,zipc,phonenumber);
-			if ((input-1)>=0) mainArr.get(input-1).add(cb);
+			ContactBook cb = new ContactBook(firstName,lastName,address,state,city,emailId,zip,phoneNumber);
+			if ((input-1)>=0) {
+				if (!duplicateChecker(firstName +" "+lastName, mainArr.get(input-1))) {
+					mainArr.get(input-1).add(cb);
+				}
+			}
 			else arr.add(cb);
-			displayContact();
 			record--;
 		}
 		if ((input-1)<0) mainArr.add(arr);
 		
 	}
 	
-
+	private static boolean duplicateChecker(String name, ArrayList<ContactBook> arr) {
+		ArrayList<String> duplicateCheck = new ArrayList<>();
+		for(int i=0;i<arr.size();i++) {
+			duplicateCheck.add(arr.get(i).firstName+" "+arr.get(i).lastName);
+		}
+		if (duplicateCheck.stream().anyMatch(n-> name.equals(n))) return true;
+		return false;
+	}
+	
 	//method for editing contact
 	public static void editContact() {
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter records to be edited: ");
 		int editrecord = sc.nextInt();
-		
 		while ( editrecord!= 0 ) {
-			System.out.println("Enter firstname lastname address state city emailid zipc phonenumber");
+			System.out.println("Enter Firstname and Lastname :");
 			String input1 = sc.nextLine();
 			input1 = input1.replaceAll("\\s", "");
-			if ( input1.equals("firstname") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				for(int j =0 ;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).firstname.equals(name) ) {
-							mainArr.get(j).get(i).firstname=updatename;
-							break;
-						}
-					}
-				}
-			}
+			String input2 = sc.nextLine();
 			
-			else if ( input1.equals("lastname") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).lastname.equals(name) ) {
-							mainArr.get(j).get(i).lastname=updatename;
-							break;
-						}
+			String firstName= sc.nextLine();
+			
+			String lastName= sc.nextLine();
+			
+			String address= sc.nextLine();
+			
+			String state= sc.nextLine();
+			
+			String city= sc.nextLine();
+			
+			String emailId= sc.nextLine();
+			
+			int zip =sc.nextInt(); 
+			
+			String phoneNumber=sc.nextLine(); 
+			
+			//Below substring done due to ide memory buffer error
+			firstName = firstName.replaceAll("\\s", "");
+			phoneNumber = phoneNumber.replaceAll("\\s", "");
+
+			//creation of object or address book creation
+			ContactBook cb = new ContactBook(firstName,lastName,address,state,city,emailId,zip,phoneNumber);
+			int flag = 0;
+			for(int i=0;i<mainArr.size();i++) {
+				for(int j=0;j<mainArr.get(i).size();j++) {
+					if (mainArr.get(i).get(j).firstName.equals(input1) && mainArr.get(i).get(j).lastName.equals(input2)) {
+						mainArr.get(i).remove(j);
+						mainArr.get(i).add(j, cb);
+						flag = 1;
+						break;
+			
 					}
 				}
-			}
-			else if ( input1.equals("address") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).address.equals(name) ) {
-							mainArr.get(j).get(i).address=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("state") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).state.equals(name) ) {
-							mainArr.get(j).get(i).state=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("city") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).city.equals(name) ) {
-							mainArr.get(j).get(i).city=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("emailid") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).emailid.equals(name) ) {
-							mainArr.get(j).get(i).emailid=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("zipc") ) {
-				int name = sc.nextInt();
-				int updatename = sc.nextInt();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).zipc == name ) {
-							mainArr.get(j).get(i).zipc=updatename;
-							break;
-						}
-					}
-				}
-			}
-			else if ( input1.equals("phonenumber") ) {
-				String name = sc.nextLine();
-				String updatename = sc.nextLine();
-				
-				for(int j = 0;j<mainArr.size();j++) {
-					for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-						if (mainArr.get(j).get(i).phonenumber.equals(name) ) {
-							mainArr.get(j).get(i).phonenumber=updatename;
-							break;
-						}
-					}
-				}
+				if (flag==1) break;
 			}
 			editrecord--;
 		}
@@ -184,7 +131,7 @@ public class AddressBook {
 			
 			for(int j = 0;j<mainArr.size();j++) {
 				for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-					if (mainArr.get(j).get(i).firstname.equals(name)) {
+					if (mainArr.get(j).get(i).firstName.equals(name)) {
 						mainArr.get(j).remove(i);
 						break;
 					}
@@ -198,29 +145,43 @@ public class AddressBook {
 	public static void displayContact() {
 		
 		for(int j = 0;j<mainArr.size();j++) {
+			System.out.println();
+			System.out.println(addressBookName.get(j));
 			for(int i = 0 ; i < mainArr.get(j).size(); i++) {
-				System.out.println();
-				System.out.println("Firstname: " + mainArr.get(j).get(i).firstname);
-				System.out.println("Lastname: " + mainArr.get(j).get(i).lastname);
+				System.out.println("Firstname: " + mainArr.get(j).get(i).firstName);
+				System.out.println("Lastname: " + mainArr.get(j).get(i).lastName);
 				System.out.println("Address: " + mainArr.get(j).get(i).address);
 				System.out.println("State: " + mainArr.get(j).get(i).state);
 				System.out.println("City: " + mainArr.get(j).get(i).city);
-				System.out.println("Emailid: " + mainArr.get(j).get(i).emailid);
-				System.out.println("Zipcode: " + mainArr.get(j).get(i).zipc);
-				System.out.println("Phone number: " + mainArr.get(j).get(i).phonenumber);
+				System.out.println("Emailid: " + mainArr.get(j).get(i).emailId);
+				System.out.println("Zipcode: " + mainArr.get(j).get(i).zip);
+				System.out.println("Phone number: " + mainArr.get(j).get(i).phoneNumber);
+				System.out.println();
 			}
 		}
-	}
-	
+	}	
 
 	private static void multiAddContact() {
 		Scanner sc = new Scanner(System.in);
 		if (mainArr.size()>0) {
 			System.out.println("Enter position: 1-" + mainArr.size());
 			int input = sc.nextInt();
-			addContact(input);
+			if (input > mainArr.size()) {
+				System.out.println("Enter Address Book name");
+				String dummy = sc.nextLine();
+				String adName = sc.nextLine();
+				addressBookName.put(input-1, adName);
+				addContact(0);
+			}
+			else {
+				addContact(input);
+			}
+			
 		}
 		else {
+			System.out.println("Enter Address Book name");
+			String adName = sc.nextLine();
+			addressBookName.put(0, adName);
 			addContact(0);
 		}
 	}
