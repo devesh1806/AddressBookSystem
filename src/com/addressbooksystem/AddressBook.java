@@ -1,6 +1,9 @@
 package com.addressbooksystem;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -57,12 +60,8 @@ public class AddressBook {
 	}
 	
 	private static boolean duplicateChecker(String name, ArrayList<ContactBook> arr) {
-		ArrayList<String> duplicateCheck = new ArrayList<>();
-		for(int i=0;i<arr.size();i++) {
-			duplicateCheck.add(arr.get(i).firstName+" "+arr.get(i).lastName);
-		}
-		if (duplicateCheck.stream().anyMatch(n-> name.equals(n))) return true;
-		return false;
+		boolean flag = arr.stream().anyMatch(n->(n.firstName+" "+n.lastName).equals(name));
+		return flag;
 	}
 	
 	//method for editing contact
@@ -186,7 +185,27 @@ public class AddressBook {
 		}
 	}
 	
+	private static void searchPersons() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to Search According to 1.City 2.State");
+		int input = sc.nextInt();
+		String adName = sc.nextLine().replace(" ", "");
+		System.out.println();
 
+		if (input==1) {
+			mainArr.stream().forEach(n->{
+			for (ContactBook contactBook : n) {
+				if (contactBook.city.equals(adName)) System.out.println(contactBook.firstName+" "+contactBook.lastName);
+			}});
+		}
+		else {
+			mainArr.stream().forEach(n->{
+				for (ContactBook contactBook : n) {
+					if (contactBook.state.equals(adName)) System.out.println(contactBook.firstName+" "+contactBook.lastName);
+				}});
+		}
+	}
+		
 	//main method
 	public static void main(String[] args) {
 		
@@ -194,7 +213,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -210,6 +229,9 @@ public class AddressBook {
 					displayContact();
 					break;
 				case 5:
+					searchPersons();
+					break;
+				case 6:
 					flag=1;
 					break;
 				default:
@@ -219,6 +241,8 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
+
+	
 
 }
 
