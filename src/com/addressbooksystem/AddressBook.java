@@ -6,7 +6,8 @@ import java.util.function.Predicate;
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AddressBook {
 	
@@ -247,6 +248,29 @@ public class AddressBook {
 		}
 	}
 	
+	private static void countPersons() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to Search According to 1.City 2.State");
+		int input = sc.nextInt();
+		String adName = sc.nextLine().replace(" ", "");
+		System.out.println();
+		
+		if (input==1) {
+			Map<String, Long> count = addressBookCity.values().stream().collect(Collectors.groupingBy(Function.identity(),
+	                Collectors.counting()));
+			count.keySet().stream().forEach(n->{
+				System.out.println(n+" : "+count.get(n));
+			});
+		}
+		else {
+			Map<String, Long> count = addressBookState.values().stream().collect(Collectors.groupingBy(Function.identity(),
+	                Collectors.counting()));
+			count.keySet().stream().forEach(n->{
+				System.out.println(n+" : "+count.get(n));
+			});
+		}
+		
+	}
 	
 	//main method
 	public static void main(String[] args) {
@@ -255,7 +279,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -277,6 +301,9 @@ public class AddressBook {
 					viewPersons();
 					break;
 				case 7:
+					countPersons();
+					break;
+				case 8:
 					flag=1;
 					break;
 				default:
