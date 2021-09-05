@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -272,6 +274,10 @@ public class AddressBook {
 		
 	}
 	
+	private static void sortedName() {
+		mainArr.stream().forEach(n-> Collections.sort(n, new ContactBookComparator()));
+	}
+	
 	//main method
 	public static void main(String[] args) {
 		
@@ -279,7 +285,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -304,6 +310,9 @@ public class AddressBook {
 					countPersons();
 					break;
 				case 8:
+					sortedName();
+					break;
+				case 9:
 					flag=1;
 					break;
 				default:
