@@ -12,6 +12,8 @@ public class AddressBook {
 	
 	public static HashMap<Integer, String> addressBookName = new HashMap<Integer,String>();
 	public static ArrayList<ArrayList<ContactBook>> mainArr= new ArrayList<ArrayList<ContactBook>>();
+	public static HashMap<String, String> addressBookCity = new HashMap<String,String>();
+	public static HashMap<String, String> addressBookState = new HashMap<String,String>();
 	
 	//method for adding contact
 	public static void addContact(int input) {
@@ -50,9 +52,15 @@ public class AddressBook {
 			if ((input-1)>=0) {
 				if (!duplicateChecker(firstName +" "+lastName, mainArr.get(input-1))) {
 					mainArr.get(input-1).add(cb);
+					addressBookCity.put(firstName+" "+lastName,city);
+					addressBookState.put(firstName+" "+lastName,state);
 				}
 			}
-			else arr.add(cb);
+			else {
+				arr.add(cb);
+				addressBookCity.put(firstName+" "+lastName,city);
+				addressBookState.put(firstName+" "+lastName,state);
+			}
 			record--;
 		}
 		if ((input-1)<0) mainArr.add(arr);
@@ -102,11 +110,24 @@ public class AddressBook {
 			for(int i=0;i<mainArr.size();i++) {
 				for(int j=0;j<mainArr.get(i).size();j++) {
 					if (mainArr.get(i).get(j).firstName.equals(input1) && mainArr.get(i).get(j).lastName.equals(input2)) {
+						for(String names: addressBookCity.keySet()) {
+							if ((names).equals(input1+" "+input2)) {
+								addressBookCity.remove(names);
+								break;
+							}
+						}
+						for(String namesS: addressBookState.keySet()) {
+							if ((namesS).equals(input1+" "+input2)) {
+								addressBookState.remove(namesS);
+								break;
+							}
+						}
 						mainArr.get(i).remove(j);
 						mainArr.get(i).add(j, cb);
+						addressBookCity.put(firstName+" "+lastName, city);
+						addressBookState.put(firstName+" "+lastName, state);
 						flag = 1;
 						break;
-			
 					}
 				}
 				if (flag==1) break;
@@ -206,6 +227,27 @@ public class AddressBook {
 		}
 	}
 		
+
+	private static void viewPersons() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to Search According to 1.City 2.State");
+		int input = sc.nextInt();
+		String adName = sc.nextLine().replace(" ", "");
+		System.out.println();
+
+		if (input==1) {
+			addressBookCity.keySet().stream().forEach(n->{
+				System.out.println(n+" lives in "+addressBookCity.get(n));
+			});; 
+		}
+		else {
+			addressBookState.keySet().stream().forEach(n->{
+				System.out.println(n+" lives in "+addressBookState.get(n));
+			});;
+		}
+	}
+	
+	
 	//main method
 	public static void main(String[] args) {
 		
@@ -213,7 +255,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -232,6 +274,9 @@ public class AddressBook {
 					searchPersons();
 					break;
 				case 6:
+					viewPersons();
+					break;
+				case 7:
 					flag=1;
 					break;
 				default:
@@ -241,8 +286,6 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
-
-	
 
 }
 
