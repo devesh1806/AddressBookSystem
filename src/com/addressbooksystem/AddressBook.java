@@ -275,7 +275,26 @@ public class AddressBook {
 	}
 	
 	private static void sortedName() {
-		mainArr.stream().forEach(n-> Collections.sort(n, new ContactBookComparator()));
+		mainArr.stream().forEach(n-> Collections.sort(n, new FirstNameComparator()));
+	}
+	
+	private static void sortCityZipState() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to Search According to 1.City 2.State 3.Zip");
+		int input = sc.nextInt();
+		switch(input) {
+			case 1:
+				mainArr.stream().forEach(n-> Collections.sort(n, new CityComparator()));
+				break;
+				
+			case 2:
+				mainArr.stream().forEach(n-> Collections.sort(n, new StateComparator()));
+				break;
+			
+			case 3:
+				mainArr.stream().forEach(n-> Collections.sort(n, new ZipComparator()));
+				break;
+		}
 	}
 	
 	//main method
@@ -285,7 +304,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -313,6 +332,9 @@ public class AddressBook {
 					sortedName();
 					break;
 				case 9:
+					sortCityZipState();
+					break;
+				case 10:
 					flag=1;
 					break;
 				default:
