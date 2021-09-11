@@ -4,6 +4,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.awt.List;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,12 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.sound.midi.SysexMessage;
+
 public class AddressBook {
 	
 	public static HashMap<Integer, String> addressBookName = new HashMap<Integer,String>();
 	public static ArrayList<ArrayList<ContactBook>> mainArr= new ArrayList<ArrayList<ContactBook>>();
 	public static HashMap<String, String> addressBookCity = new HashMap<String,String>();
 	public static HashMap<String, String> addressBookState = new HashMap<String,String>();
+	public static String PathName = "file.txt";
 	
 	//method for adding contact
 	public static void addContact(int input) {
@@ -297,6 +305,28 @@ public class AddressBook {
 		}
 	}
 	
+	private static void writeData() {
+		StringBuffer empBuffer = new StringBuffer();
+		mainArr.stream().forEach(n->{
+			for (ContactBook contactBook : n) {
+				String dataString = contactBook.toString().concat("\n");
+				empBuffer.append(dataString);
+			}
+		});
+		try {
+			Files.write(Paths.get(PathName),empBuffer.toString().getBytes());
+		}catch(IOException e) {e.getStackTrace();}
+		
+	}
+
+	private static void readData() {
+		try {
+			Files.lines(new File(PathName).toPath()).forEach(System.out::println);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//main method
 	public static void main(String[] args) {
 		
@@ -304,7 +334,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.Read From File 11.Write To File 12.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -335,6 +365,12 @@ public class AddressBook {
 					sortCityZipState();
 					break;
 				case 10:
+					readData();
+					break;
+				case 11:
+					writeData();
+					break;
+				case 12:
 					flag=1;
 					break;
 				default:
@@ -344,6 +380,8 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
+
+
 
 }
 

@@ -24,4 +24,9 @@ public class ContactBook {
 		this.phoneNumber=phoneNumber;
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "Firstname: " + firstName +" Lastname: " + lastName+" Address: " + address+" State: " + state+ " City: "+ city+ " Emailid: " + emailId+" Zipcode: " + zip+" Phone number: " + phoneNumber+"\n";
+	}
 }
