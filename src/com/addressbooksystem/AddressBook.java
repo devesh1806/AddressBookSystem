@@ -3,7 +3,10 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -18,6 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -29,6 +40,7 @@ public class AddressBook {
 	public static HashMap<String, String> addressBookState = new HashMap<String,String>();
 	public static String PathName = "file.txt";
 	public static String PathCsvName = "file-csv.csv";
+	public static String PathJsonName = "file-json.json";
 	
 	//method for adding contact
 	public static void addContact(int input) {
@@ -345,6 +357,29 @@ public class AddressBook {
 		}
 		
 	}
+	
+
+	private static void readJsonData(){
+		Gson gson = new Gson();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(PathJsonName));
+			br.lines().forEach(line->{
+				ContactBook contactBook = gson.fromJson(line, ContactBook.class);
+				System.out.println("Firstname: " + contactBook.firstName);
+				System.out.println("Lastname: " + contactBook.lastName);
+				System.out.println("Address: " + contactBook.address);
+				System.out.println("State: " + contactBook.state);
+				System.out.println("City: " + contactBook.city);
+				System.out.println("Emailid: " + contactBook.emailId);
+				System.out.println("Zipcode: " + contactBook.zip);
+				System.out.println("Phone number: " + contactBook.phoneNumber);
+				System.out.println();
+			});
+			br.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void writeCsvData() throws IOException{
 		
@@ -365,6 +400,24 @@ public class AddressBook {
 			e.getStackTrace();
 		}
 	}
+	
+
+	private static void writeJsonData(){
+		try(
+			FileWriter writerFile = new FileWriter(new File(PathJsonName));
+		){
+			Gson gson = new Gson();
+			mainArr.stream().forEach(n->{
+				for (ContactBook contactBook : n) {
+					String json = gson.toJson(contactBook).concat("\n");
+					try {writerFile.write(json);}catch(IOException e) {};
+				}
+			});
+			writerFile.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void readData() {
 		try {
@@ -383,7 +436,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.Read From File 11.Write To File 12.Read From CSV File 13.Write To CSV File 14.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.Read From File 11.Write To File 12.Read From CSV File 13.Write To CSV File 14.Read From JSON File 15.Write To JSON File 16.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -436,6 +489,12 @@ public class AddressBook {
 					
 					break;
 				case 14:
+					readJsonData();
+					break;
+				case 15:
+					writeJsonData();
+					break;
+				case 16:
 					flag=1;
 					break;
 				default:
@@ -445,10 +504,6 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
-
-	
-
-
 
 }
 
