@@ -3,20 +3,23 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.awt.List;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Array;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.sound.midi.SysexMessage;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 public class AddressBook {
 	
@@ -25,6 +28,7 @@ public class AddressBook {
 	public static HashMap<String, String> addressBookCity = new HashMap<String,String>();
 	public static HashMap<String, String> addressBookState = new HashMap<String,String>();
 	public static String PathName = "file.txt";
+	public static String PathCsvName = "file-csv.csv";
 	
 	//method for adding contact
 	public static void addContact(int input) {
@@ -318,6 +322,49 @@ public class AddressBook {
 		}catch(IOException e) {e.getStackTrace();}
 		
 	}
+	
+	private static void readCsvData() throws IOException{
+		try {
+			Reader readerFile = Files.newBufferedReader(Paths.get(PathCsvName));
+			CSVReader reader = new CSVReader(readerFile);
+			List<String[]> records = reader.readAll();
+			records.stream().forEach(n->{
+				System.out.print(n[0]+" ");
+				System.out.print(n[1]+ " " );
+				System.out.print(n[2]+ " ");
+				System.out.print(n[3]+ " ");
+				System.out.print(n[4]+ " ");
+				System.out.print(n[5]+" ");
+				System.out.print(n[6]+ " ");
+				System.out.print(n[7]+" ");
+				System.out.println();
+			});
+			reader.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private static void writeCsvData() throws IOException{
+		
+		FileWriter writerFile = new FileWriter(new File(PathCsvName));
+		CSVWriter writer = new CSVWriter(writerFile);
+		
+		List<String[]> data = new ArrayList<String[]>();
+		data.add(new String[] {"FirstName","LastName" ,"Address" ,"State","City","EmailID","ZipCode","PhoneNumber"});
+		mainArr.stream().forEach(n->{
+			for (ContactBook contactBook : n) {
+				data.add(new String[] {contactBook.firstName,contactBook.lastName,contactBook.address,contactBook.state,contactBook.city,contactBook.emailId,String.valueOf(contactBook.zip),contactBook.phoneNumber});
+			}
+		});
+		try {
+			writer.writeAll(data);
+			writer.close();
+		}catch(IOException e) {
+			e.getStackTrace();
+		}
+	}
 
 	private static void readData() {
 		try {
@@ -327,6 +374,8 @@ public class AddressBook {
 		}
 	}
 	
+	
+	
 	//main method
 	public static void main(String[] args) {
 		
@@ -334,7 +383,7 @@ public class AddressBook {
 		int total=0;
 		int flag = 0;
 		while(true) {
-			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.Read From File 11.Write To File 12.exit");
+			System.out.println("Enter 1.Add 2.Edit 3.delete 4.Display 5.Search 6.View Persons 7.Count Persons 8.Sorted By Name 9. Sort using 10.Read From File 11.Write To File 12.Read From CSV File 13.Write To CSV File 14.exit");
 			int option = sc.nextInt();
 			switch (option){
 				case 1:
@@ -371,6 +420,22 @@ public class AddressBook {
 					writeData();
 					break;
 				case 12:
+					try {
+						readCsvData();
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+					
+					break;
+				case 13:
+					try {
+						writeCsvData();
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+					
+					break;
+				case 14:
 					flag=1;
 					break;
 				default:
@@ -380,6 +445,8 @@ public class AddressBook {
 			if (flag == 1) break;
 		}
 	}
+
+	
 
 
 
